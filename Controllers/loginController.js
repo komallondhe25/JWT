@@ -1,5 +1,23 @@
 import express from 'express';
-export const loginController =   (req,res) => {
+import  jwt  from 'jsonwebtoken';
 
-    res.status(200).send("Loggedin successfully");
+
+export const loginController =  (req, res) => {   
+//  Authenticate user
+try {
+    const username = req.body.username;
+    const user = {
+        name : username
+    }
+   const singedJwtToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '60s' });
+   res.send({
+    "accesstoken" : singedJwtToken
+   }).status(200);
+ 
+} catch (error) {
+    res.send({
+       message : "Error has occured"
+    }).status(500);
 }
+}
+
